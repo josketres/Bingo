@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en" ng-app="ticketApp">
+<head>
+    <meta charset="utf-8">
+    <title>Bingo</title>
+    <link rel="stylesheet" href="bower_components/ngDialog/css/ngDialog.css">
+    <link rel="stylesheet" href="bower_components/ngDialog/css/ngDialog-theme-default.css">
+    <link rel="stylesheet" href="css/ticket.css">
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-resource/angular-resource.js"></script>
+    <script src="bower_components/ngDialog/js/ngDialog.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/ticket/ticketModel.js"></script>
+    <script src="js/ticket/ticketControllers.js"></script>
+    <script src="js/ticket/ticketServices.js"></script>
+    <script src="js/model/boardCell.js"></script>
+    <script src="js/model/board.js"></script>
+    <script src="js/model/numbers.js"></script>
+    <script src="js/model/numberCell.js"></script>
+    <script src="js/model/prize.js"></script>
+    <script src="js/model/totalPrize.js"></script>
+</head>
+<body ng-controller="TicketCtrl">
+    <div id="content">
+        <div id="info">
+            <div id="numbers">
+                <table>
+                    <th colspan="10">Numbers</th>
+                    <tr ng-repeat="row in numbers.getTable()">
+                        <td ng-repeat="number in row track by $index"
+                            ng-class="{'show': number.getShow()}">
+                            {{number.getNumber()}}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div id="nextNumber">
+                <div class="ball">
+                    <span class="ballNumber"
+                          ng-class="{'hidden': !isNextNumberAvailable()}">
+                        {{nextNumber}}
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div id="remainingBalls">
+            <table>
+                <tr>
+                    <td ng-repeat="remainingBall in numbers.getRemainingBalls() track by $index"
+                        ng-class="{'filled': remainingBall}">
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div id="boards">
+            <div class="board" ng-repeat="boardDefinition in ticketModel.getBoards()">
+                <table>
+                    <th colspan="5">{{'Board ' + boardDefinition.getNumber()}}</th>
+                    <tr ng-repeat="row in boardDefinition.getBoard()">
+                        <td ng-repeat="cell in row track by $index"
+                            ng-class="{'star': boardDefinition.isCellEmpty($parent.$index, $index),
+                                       'light': boardDefinition.isCellLight($parent.$index, $index)}">
+                            <span ng-show="!boardDefinition.isCellEmpty($parent.$index, $index)">{{boardDefinition.getBoard()[$parent.$index][$index].getNumber()}}</span>
+                            <div class="cross"
+                                 ng-show="!boardDefinition.isCellEmpty($parent.$index, $index)"
+                                 ng-class="{'checked': boardDefinition.isCellChecked($parent.$index, $index)}">
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div id="actions">
+            <div id="turbo">
+                <div class="buttonContainer">
+                    <button class="bingoButton"
+                            ng-disabled="!isTurboEnabled()"
+                            ng-click="turbo()"
+                            ng-class="{'disabled': !isTurboEnabled()}">Turbo</button>
+                </div>
+            </div>
+            <div id="prizes">
+                <div id="prizeContainer">
+                    <div class="prize"
+                         ng-repeat="prizeDefinition in prizes"
+                         ng-class="{'winninClassWon': isWinningClassesWon(prizeDefinition)}">
+                        <table>
+                            <tr ng-repeat="row in prizeDefinition.positions">
+                                <td ng-repeat="cell in row track by $index"
+                                    ng-class="{'matched': cell == 1}">
+                                </td>
+                            </tr>
+                        </table>
+                        <div class="prizeAmount">{{prizeDefinition.prize.amount + ' €'}}</div>
+                    </div>
+                </div>
+            </div>
+            <div id="play">
+                <div class="buttonContainer">
+                    <button class="bingoButton"
+                            ng-disabled="!isPlayEnabled()"
+                            ng-click="play()"
+                            ng-class="{'disabled': !isPlayEnabled()}">Play</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
