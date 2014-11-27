@@ -26,7 +26,7 @@ body {
 #content {
   margin: $main-size 0px;
   display: table;
-  width: 45%;
+  width: 40 * $main-size;
   //TODO adapt this to see if it fits to the content
   height: 40 * $main-size;
   margin-left: auto;

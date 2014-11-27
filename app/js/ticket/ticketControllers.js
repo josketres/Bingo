@@ -6,7 +6,7 @@ var ticketControllers = angular.module('ticketControllers', ['ngDialog']);
 
 ticketControllers.controller('TicketCtrl', ['$scope', '$interval', 'ngDialog', 'Scenario', 'Prizes', function($scope, $interval, ngDialog, Scenario, Prizes) {
 
-    $scope.scenario = Scenario.get({scenarioId: 'scenario2.json'}, function(scenario) {
+    $scope.scenario = Scenario.get({scenarioId: 'scenario1.json'}, function(scenario) {
         $scope.ticketModel = new TicketModel(scenario);
         $scope.numbers = new Numbers(scenario.revealedNumbers.length);
     });
@@ -20,7 +20,7 @@ ticketControllers.controller('TicketCtrl', ['$scope', '$interval', 'ngDialog', '
 
     $scope.numberIndex = 0;
 
-    $scope.speed = 2000;
+    $scope.speed = 1000;
 
     $scope.amountPrizeWon = 0;
     $scope.winningClassesPrizeWon = new Array();
